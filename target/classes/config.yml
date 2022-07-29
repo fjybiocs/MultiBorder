@@ -1,0 +1,64 @@
+# 玩家在被边界击退时的提示语
+knock-back-msg: "§6[交大助手] 你已到达区域边界"
+# 玩家在尝试传送到边界外时的提示语
+tp-out-msg: "§6[交大助手] 你不可传送到区域边界外"
+# 将玩家击退的距离
+knock-back-distance: 5
+
+# 区域设置
+areas:
+  # 区域所在世界
+  world:
+    # 区域名称
+    old:
+      # 区域x上限
+      x-max: 40
+      # 区域x下限
+      x-min: -40
+      # 区域z上限
+      z-max: 40
+      # 区域z下限
+      z-min: -40
+      # 出生点x坐标
+      spawn-x: 0
+      # 出生点z坐标
+      spawn-z: 0
+    new:
+      x-max: 140
+      x-min: 60
+      z-max: 140
+      z-min: 60
+      spawn-x: 100
+      spawn-z: 100
+  world_nether:
+    old:
+      x-max: 40
+      x-min: -40
+      z-max: 40
+      z-min: -40
+      spawn-x: 0
+      spawn-z: 0
+    new:
+      x-max: 140
+      x-min: 60
+      z-max: 140
+      z-min: 60
+      spawn-x: 100
+      spawn-z: 100
+  # 因为两个区域的玩家是在两个末地世界，所以这里有两个末地世界，每个世界只有一个border
+  world_the_end:
+    old:
+      x-max: 40
+      x-min: -40
+      z-max: 40
+      z-min: -40
+      spawn-x: 0
+      spawn-z: 0
+  world_the_end_new:
+    new:
+      x-max: 40
+      x-min: -40
+      z-max: 40
+      z-min: -40
+      spawn-x: 0
+      spawn-z: 0
