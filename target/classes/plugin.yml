@@ -1,3 +1,6 @@
 name: MultiBorder
 version: 1.0
+api-version: 1.18
+depend:
+  - dynmap
 main: com.mcfuntime.MultiBorder.MultiBorder

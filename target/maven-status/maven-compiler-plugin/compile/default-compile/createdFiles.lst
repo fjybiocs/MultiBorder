@@ -1,6 +1,8 @@
 com/mcfuntime/MultiBorder/Border.class
+com/mcfuntime/MultiBorder/SafeTeleport.class
 com/mcfuntime/MultiBorder/Config.class
 com/mcfuntime/MultiBorder/ChooseAreaGUI.class
 com/mcfuntime/MultiBorder/PlayerListener.class
 com/mcfuntime/MultiBorder/WorldBorders.class
 com/mcfuntime/MultiBorder/MultiBorder.class
+com/mcfuntime/MultiBorder/DynmapDisplay.class

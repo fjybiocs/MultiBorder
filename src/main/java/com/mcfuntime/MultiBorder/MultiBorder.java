@@ -1,6 +1,7 @@
 package com.mcfuntime.MultiBorder;
 
 import org.bukkit.plugin.java.JavaPlugin;
+import org.dynmap.DynmapAPI;
 
 public class MultiBorder extends JavaPlugin {
 
@@ -10,6 +11,8 @@ public class MultiBorder extends JavaPlugin {
 
         getServer().getPluginManager().registerEvents(new PlayerListener(), this);
         getServer().getPluginManager().registerEvents(new ChooseAreaGUI(), this);
+
+        DynmapDisplay.initializeDynmap(this);
 
         getLogger().info("MultiBorder now enabled.");
     }

@@ -4,6 +4,23 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 public class Border {
+    // automatically generated getters by idea
+    public double getxMin() {
+        return xMin;
+    }
+
+    public double getxMax() {
+        return xMax;
+    }
+
+    public double getzMax() {
+        return zMax;
+    }
+
+    public double getzMin() {
+        return zMin;
+    }
+
     private final double xMin;
     private final double xMax;
     private final double zMax;
@@ -30,26 +47,21 @@ public class Border {
         double desZ = curLoc.getZ();
 
         if(curLoc.getX() > xMax){
-            desX = curLoc.getX() - distance;
+            desX = this.xMax - distance;
         }
         else if(curLoc.getX() < xMin){
-            desX = curLoc.getX() + distance;
+            desX = this.xMin + distance;
         }
 
         if(curLoc.getZ() > zMax){
-            desZ = curLoc.getZ() - distance;
+            desZ = this.zMax - distance;
         }
         else if(curLoc.getZ() < zMin) {
-            desZ = curLoc.getZ() + distance;
-        }
-
-        if(!this.isInsideBorder(desX, desZ)){
-            desX = this.spawnX;
-            desZ = this.spawnZ;
+            desZ = this.zMin + distance;
         }
 
         Location desLoc = new Location(player.getWorld(), desX, curLoc.getY(), desZ, curLoc.getYaw(), curLoc.getPitch());
-        player.teleport(desLoc);
+        SafeTeleport.safeTeleport(player, desLoc);
     }
 
     // return the corresponding border for the player

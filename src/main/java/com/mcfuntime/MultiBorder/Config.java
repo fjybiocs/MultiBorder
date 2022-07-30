@@ -101,6 +101,10 @@ public class Config {
         return borders.get(worldName);
     }
 
+    public static Map<String, WorldBorders> getWorldBorder(){
+        return borders;
+    }
+
     public static int getKnockBackDistance(){
         return knockBackDistance;
     }

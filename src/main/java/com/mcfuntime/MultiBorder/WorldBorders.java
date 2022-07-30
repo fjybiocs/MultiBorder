@@ -13,4 +13,8 @@ public class WorldBorders {
     public Border getBorder(String name){
         return borders.get(name);
     }
+
+    public Map<String ,Border> getBorder(){
+        return borders;
+    }
 }
