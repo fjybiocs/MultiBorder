@@ -129,8 +129,6 @@ public class SafeTeleport {
     {
         boolean safe = safeOpenBlocks.contains(world.getBlockAt(X, Y, Z).getType())		// target block open and safe
                 && safeOpenBlocks.contains(world.getBlockAt(X, Y + 1, Z).getType());	// above target block open and safe
-        System.out.println(world.getBlockAt(X, Y, Z).getType());
-        System.out.println(world.getBlockAt(X, Y + 1, Z).getType());
         if (!safe || flying)
             return safe;
 
@@ -170,7 +168,6 @@ public class SafeTeleport {
         }
         if (Y < limBot){
             Y = limBot;
-            System.out.println("test");
         }
 
         // for non-Nether worlds we don't need to check upwards to the world-limit, it is enough to check up to the highestBlockBoundary, unless player is flying
@@ -197,14 +194,12 @@ public class SafeTeleport {
     }
 
     public static void safeTeleport(Player p, Location loc){
-        System.out.println("safe teleport enabled");
         assert loc.getWorld() != null;
         double desY = getSafeY(loc.getWorld(), (int)loc.getX(), (int)loc.getY(), (int)loc.getZ(), p.isFlying());
 
         //if(desY == -1){
         //    desY = loc.getWorld().getHighestBlockYAt((int)loc.getX(), (int)loc.getZ());
         //}
-        System.out.println("return desY = " + desY);
         Location desLoc = new Location(loc.getWorld(), loc.getX(), desY, loc.getZ(), loc.getYaw(), loc.getPitch());
         p.teleport(desLoc);
     }

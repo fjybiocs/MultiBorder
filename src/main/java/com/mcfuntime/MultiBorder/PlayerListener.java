@@ -61,7 +61,10 @@ public class PlayerListener implements Listener{
 
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event){
-        Config.getPlayerStatus(event.getPlayer());
+        if(Config.getPlayerStatus(event.getPlayer()) == 0) {
+            ChooseAreaGUI gui = new ChooseAreaGUI();
+            gui.openInventory(event.getPlayer());
+        }
     }
 
     @EventHandler

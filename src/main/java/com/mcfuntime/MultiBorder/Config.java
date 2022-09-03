@@ -92,19 +92,15 @@ public class Config {
     public static String getKnockBackMsg(){
         return knockBackMsg;
     }
-
     public static String getTpOutMsg(){
         return tpOutMsg;
     }
-
     public static WorldBorders getWorldBorder(String worldName){
         return borders.get(worldName);
     }
-
     public static Map<String, WorldBorders> getWorldBorder(){
         return borders;
     }
-
     public static int getKnockBackDistance(){
         return knockBackDistance;
     }
@@ -126,23 +122,18 @@ public class Config {
     // 0 means unknown, 1 means the old area, 2 means the new area.
     public static int getPlayerStatus(Player p){
         // get from memory
-        if(playerStatus.get(p.getName()) != null){
-            return playerStatus.get(p.getName());
+        if(playerStatus.get(p.getName()) == null){
+            // null, then get from disk(and write it into memory)
+            if(Config.status.getString(p.getName()) == null){
+                // return unknown
+                return 0;
+            }
+            else{
+                // read from disk
+                Config.addPlayerStatusRecord(p, Config.status.getInt(p.getName()));
+            }
         }
-
-        // null, then get from disk(and write it into memory)
-        if(Config.status.getString(p.getName()) == null){
-            // if there is no related record on the disk, then ask the player to create
-            ChooseAreaGUI gui = new ChooseAreaGUI();
-            gui.openInventory(p);
-        }
-        else{
-            // read from disk
-            Config.addPlayerStatusRecord(p, Config.status.getInt(p.getName()));
-        }
-
-        // return unknown, case the operations ahead are asynchronous
-        return 0;
+        return playerStatus.get(p.getName());
     }
 
     private static void saveStatus(){

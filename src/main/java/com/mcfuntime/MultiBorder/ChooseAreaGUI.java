@@ -67,14 +67,25 @@ public class ChooseAreaGUI implements Listener {
 
         switch (e.getRawSlot()) {
             case 0 -> {
+                if(Config.getPlayerStatus(p) == 1) {
+                    // clear
+                    p.getInventory().clear();
+                    p.setExp(0);
+                    p.getEnderChest().clear();
+                }
                 Config.addPlayerStatusRecord(p, 2);
                 e.getView().close();
-                p.sendMessage("新区");
+                p.sendMessage("§6欢迎来到新区");
             }
             case 1 -> {
+                if(Config.getPlayerStatus(p) == 2) {
+                    p.getInventory().clear();
+                    p.setExp(0);
+                    p.getEnderChest().clear();
+                }
                 Config.addPlayerStatusRecord(p, 1);
                 e.getView().close();
-                p.sendMessage("老区");
+                p.sendMessage("§6欢迎回到老区");
             }
         }
     }

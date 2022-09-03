@@ -12,6 +12,8 @@ public class MultiBorder extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new PlayerListener(), this);
         getServer().getPluginManager().registerEvents(new ChooseAreaGUI(), this);
 
+        this.getCommand("area").setExecutor(new AreaCommandExecutor());
+
         DynmapDisplay.initializeDynmap(this);
 
         getLogger().info("MultiBorder now enabled.");

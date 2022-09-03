@@ -4,3 +4,7 @@ api-version: 1.18
 depend:
   - dynmap
 main: com.mcfuntime.MultiBorder.MultiBorder
+commands:
+  area:
+    description: 切换区域，切换时会清空你的背包、末影箱、经验。
+    usage: /<command>
