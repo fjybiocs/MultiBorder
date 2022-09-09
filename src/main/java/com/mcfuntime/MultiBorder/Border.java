@@ -71,12 +71,6 @@ public class Border {
         // create a destination object
         Location desLoc = new Location(player.getWorld(), desX, curLoc.getY(), desZ, curLoc.getYaw(), curLoc.getPitch());
 
-        // determine whether the destination is inside the corresponding edge
-        if(this.isInsideBorder(desX, desZ)){
-            // if destination is out of border, then change the destination to the zone spawn point
-            desLoc = new Location(desLoc.getWorld(), this.spawnX, desLoc.getY(), this.spawnZ, desLoc.getYaw(), desLoc.getPitch());
-        }
-
         // safely teleport the player to the destination
         SafeTeleport.safeTeleport(player, desLoc);
     }
