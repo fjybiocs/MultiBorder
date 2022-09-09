@@ -1,6 +1,7 @@
 package com.mcfuntime.MultiBorder;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -15,7 +16,7 @@ import java.util.Arrays;
 
 public class ChooseAreaGUI implements Listener {
     private final Inventory inv;
-    private static final String title = "§c选择后不可修改，请谨慎选择！";
+    private static final String title = "§c请谨慎选择，若不了解规则请查看群公告";
 
     public ChooseAreaGUI() {
         // Create a new inventory, with no owner (as this isn't a real inventory), a size of nine, called example
@@ -59,33 +60,53 @@ public class ChooseAreaGUI implements Listener {
 
         e.setCancelled(true);
 
-        //ItemStack clickedItem = e.getCurrentItem();
-        // verify current item is not null
-        // if (clickedItem == null || clickedItem.getType().isAir()) return;
-
         Player p = (Player) e.getWhoClicked();
 
         switch (e.getRawSlot()) {
+            // chose the new area
             case 0 -> {
-                if(Config.getPlayerStatus(p) == 1) {
-                    // clear
+                // if this choice is already 2
+                if(Config.getPlayerStatus(p) == 2){
+                    e.getView().close();
+                    p.sendMessage("§c[交大助手] 你已经在新区了");
+                    return;
+                }
+                // clear
+                if(!p.isOp()){
                     p.getInventory().clear();
                     p.setExp(0);
                     p.getEnderChest().clear();
                 }
-                Config.addPlayerStatusRecord(p, 2);
+                //change status
+                Config.putAndSavePlayerStatusRecord(p, 2);
+                // random teleport to old zone
+                Border border = Config.getWorldBorder("world").getBorder("new");
+                border.randomTeleportWithinThisArea(p);
+                // close the menu and remind the player
                 e.getView().close();
-                p.sendMessage("§6欢迎来到新区");
+                p.sendMessage("§6[交大助手] 欢迎来到新区");
             }
+            // chose the old area
             case 1 -> {
-                if(Config.getPlayerStatus(p) == 2) {
+                if(Config.getPlayerStatus(p) == 1){
+                    e.getView().close();
+                    p.sendMessage("§c[交大助手] 你已经在老区了");
+                    return;
+                }
+                // clear
+                if(!p.isOp()){
                     p.getInventory().clear();
                     p.setExp(0);
                     p.getEnderChest().clear();
                 }
-                Config.addPlayerStatusRecord(p, 1);
+                // change status
+                Config.putAndSavePlayerStatusRecord(p, 1);
+                // random teleport to old zone
+                Border border = Config.getWorldBorder("world").getBorder("old");
+                border.randomTeleportWithinThisArea(p);
+                // close the menu and remind the player
                 e.getView().close();
-                p.sendMessage("§6欢迎回到老区");
+                p.sendMessage("§6[交大助手] 欢迎回到老区");
             }
         }
     }

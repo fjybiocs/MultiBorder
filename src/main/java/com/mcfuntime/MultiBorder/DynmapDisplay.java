@@ -29,8 +29,8 @@ public class DynmapDisplay {
                         dynmap.getMarkerAPI().getMarkerIcons(), false);
                 AreaMarker areaMarker = markerset.createAreaMarker(
                 "mb." + worldName + "." + areaName, areaDisplayName, true, worldName,
-                        new double[] {border.getxMin(), border.getxMax()},
-                        new double[] {border.getzMin(), border.getzMax()}, false);
+                        new double[] {border.getXMin(), border.getXMax()},
+                        new double[] {border.getZMin(), border.getZMax()}, false);
             });
         });
     }

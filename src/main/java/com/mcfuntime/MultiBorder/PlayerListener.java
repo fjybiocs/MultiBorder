@@ -17,13 +17,8 @@ public class PlayerListener implements Listener{
         Player p = event.getPlayer();
         Location loc = p.getLocation();
 
-        if(Config.getPlayerStatus(p) == 0){
-            event.setCancelled(true);
-            p.sendMessage("请先选择区域");
-        }
-
         Border border = Border.getCorrBorder(loc, p.getPlayer());
-        if(!border.isInsideBorder(loc.getX(), loc.getZ())){
+        if(border.isInsideBorder(loc.getX(), loc.getZ())){
             border.knockBack(p, Config.getKnockBackDistance());
             event.getPlayer().sendMessage(Config.getKnockBackMsg());
         }
@@ -34,14 +29,11 @@ public class PlayerListener implements Listener{
         Location loc = event.getTo();
         Player p = event.getPlayer();
 
-        if(Config.getPlayerStatus(p) == 0){
-            event.setCancelled(true);
-            p.sendMessage("请先选择区域");
-        }
+        assert loc != null;
 
-        // if a player go to the wrong end world
+        // teleport the player to the new end when '2' players jump into end.
         if(Config.getPlayerStatus(p) == 2){
-            assert loc != null;
+
             assert loc.getWorld() != null;
             if(loc.getWorld().getName().equals("world_the_end")) {
                 event.setCancelled(true);
@@ -50,10 +42,8 @@ public class PlayerListener implements Listener{
             }
         }
 
-        assert loc != null;
         Border border = Border.getCorrBorder(loc, event.getPlayer());
-        assert border != null;
-        if(!border.isInsideBorder(loc.getX(), loc.getZ())){
+        if(border.isInsideBorder(loc.getX(), loc.getZ())){
             event.setCancelled(true);
             event.getPlayer().sendMessage(Config.getTpOutMsg());
         }
@@ -61,15 +51,22 @@ public class PlayerListener implements Listener{
 
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event){
+        // judge whether the player has been set status
         if(Config.getPlayerStatus(event.getPlayer()) == 0) {
-            ChooseAreaGUI gui = new ChooseAreaGUI();
-            gui.openInventory(event.getPlayer());
+            // determine whether the player is first join the game
+            if(event.getPlayer().hasPlayedBefore()){
+                Config.putAndSavePlayerStatusRecord(event.getPlayer(), 1);  // old area
+                Config.getWorldBorder("world").getBorder("old").randomTeleportWithinThisArea(event.getPlayer());
+            } else {
+                Config.putAndSavePlayerStatusRecord(event.getPlayer(), 2);  // new area
+                Config.getWorldBorder("world").getBorder("new").randomTeleportWithinThisArea(event.getPlayer());
+            }
         }
     }
 
     @EventHandler
     public void onPlayerQuit(PlayerQuitEvent event){
-        Config.removePlayerStatusRecord(event.getPlayer());
+        Config.removePlayerStatusRecordFromMemory(event.getPlayer());
     }
 
 }

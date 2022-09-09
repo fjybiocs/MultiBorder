@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+import org.bukkit.Server;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -17,8 +18,9 @@ public class Config {
     private static String knockBackMsg;
     private static String tpOutMsg;
     private static int knockBackDistance;
+    public static Server server;
 
-    // player status memory related
+    // player status storage related
     final private static Map<String, WorldBorders> borders = new HashMap<String, WorldBorders>();
     final private static Map<String, Integer> playerStatus = new HashMap<String, Integer>();
 
@@ -35,7 +37,7 @@ public class Config {
                                 double zMax, double zMin,
                                 double spawnX, double spawnZ,
                                 String worldName, String areaName){
-        Border border = new Border(xMax, xMin, zMax, zMin, spawnX, spawnZ);
+        Border border = new Border(xMax, xMin, zMax, zMin, spawnX, spawnZ, worldName);
         if(borders.get(worldName) == null){
             WorldBorders wb = new WorldBorders();
             wb.addBorder(areaName, border);
@@ -105,34 +107,41 @@ public class Config {
         return knockBackDistance;
     }
 
-    public static void addPlayerStatusRecord(Player p, int status){
+
+    public static void putAndSavePlayerStatusRecord(Player p, int status){
+        // ATTENTION: put the exist key will not replace the value
+        // so, if it exists, then remove first
+        if(playerStatus.get(p.getName()) != null) {
+            playerStatus.remove(p.getName());
+        }
+
+        // put the record in the hashmap
         playerStatus.put(p.getName(), status);
 
         // save it to the disk
-        if(Config.status.getString(p.getName()) == null){
-            Config.status.addDefault(p.getName(), status);
-            saveStatus();
-        }
+        Config.status.set(p.getName(), status);
+        saveStatus();
     }
 
-    public static void removePlayerStatusRecord(Player p){
+    public static void removePlayerStatusRecordFromMemory(Player p){
         playerStatus.remove(p.getName());
     }
 
     // 0 means unknown, 1 means the old area, 2 means the new area.
     public static int getPlayerStatus(Player p){
-        // get from memory
+        // get from memory first
         if(playerStatus.get(p.getName()) == null){
-            // null, then get from disk(and write it into memory)
+            // null means it doesn't exist in memory, then get it from disk, and write it into memory
             if(Config.status.getString(p.getName()) == null){
                 // return unknown
                 return 0;
             }
             else{
-                // read from disk
-                Config.addPlayerStatusRecord(p, Config.status.getInt(p.getName()));
+                // read from disk, write it into memory
+                playerStatus.put(p.getName(), Config.status.getInt(p.getName()));
             }
         }
+
         return playerStatus.get(p.getName());
     }
 

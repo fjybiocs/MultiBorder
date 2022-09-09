@@ -13,8 +13,7 @@ public class SafeTeleport {
 
     //these material IDs are acceptable for places to teleport player; breathable blocks and water
     public static final EnumSet<Material> safeOpenBlocks = EnumSet.noneOf(Material.class);
-    static
-    {
+    static {
         safeOpenBlocks.add(Material.AIR);
         safeOpenBlocks.add(Material.CAVE_AIR);
         safeOpenBlocks.add(Material.OAK_SAPLING);
@@ -95,8 +94,7 @@ public class SafeTeleport {
         safeOpenBlocks.add(Material.TALL_GRASS);
         safeOpenBlocks.add(Material.LARGE_FERN);
         safeOpenBlocks.add(Material.BEETROOTS);
-        try
-        {	// signs in 1.14 can be different wood types
+        try {	// signs in 1.14 can be different wood types
             safeOpenBlocks.add(Material.ACACIA_SIGN);
             safeOpenBlocks.add(Material.ACACIA_WALL_SIGN);
             safeOpenBlocks.add(Material.BIRCH_SIGN);
@@ -115,8 +113,7 @@ public class SafeTeleport {
 
     //these material IDs are ones we don't want to drop the player onto, like cactus or lava or fire or activated Ender portal
     public static final EnumSet<Material> painfulBlocks = EnumSet.noneOf(Material.class);
-    static
-    {
+    static {
         painfulBlocks.add(Material.LAVA);
         painfulBlocks.add(Material.FIRE);
         painfulBlocks.add(Material.CACTUS);
@@ -125,81 +122,49 @@ public class SafeTeleport {
     }
 
     // check if a particular spot consists of 2 breathable blocks over something relatively solid
-    private static boolean isSafeSpot(World world, int X, int Y, int Z, boolean flying)
-    {
+    private static boolean isSafeSpot(World world, int X, int Y, int Z, boolean flying) {
         boolean safe = safeOpenBlocks.contains(world.getBlockAt(X, Y, Z).getType())		// target block open and safe
                 && safeOpenBlocks.contains(world.getBlockAt(X, Y + 1, Z).getType());	// above target block open and safe
-        if (!safe || flying)
-            return safe;
-
         Material below = world.getBlockAt(X, Y - 1, Z).getType();
         return (safe
-                && (!safeOpenBlocks.contains(below) || below == Material.WATER)	// below target block not open/breathable (so presumably solid), or is water
+                && (!safeOpenBlocks.contains(below) || below== Material.WATER)	// below target block not open/breathable (so presumably solid), or is water
                 && !painfulBlocks.contains(below)									// below target block not painful
         );
     }
 
-    private static final int limBot = -63;
-
     // find the closest safe Y position from the starting position
-    private static double getSafeY(World world, int X, int Y, int Z, boolean flying)
-    {
+    private static double getSafeY(World world, int X, int Y, int Z, boolean flying) {
         // artificial height limit of 127 added for Nether worlds since CraftBukkit still incorrectly returns 255 for their max height, leading to players sent to the "roof" of the Nether
         final boolean isNether = world.getEnvironment() == World.Environment.NETHER;
         int limTop = isNether ? 125 : world.getMaxHeight() - 2;
+        int limBot = 63;
         final int highestBlockBoundary = Math.min(world.getHighestBlockYAt(X, Z) + 1, limTop);
-
-        // if Y is larger than the world can be and user can fly, return Y - Unless we are in the Nether, we might not want players on the roof
-        if (flying && Y > limTop && !isNether)
-            return (double) Y;
-
-        // make sure Y values are within the boundaries of the world.
-        if (Y > limTop)
-        {
-            if (isNether)
-                Y = limTop; // because of the roof, the nether can not rely on highestBlockBoundary, so limTop has to be used
-            else
-            {
-                if (flying)
-                    Y = limTop;
-                else
-                    Y = highestBlockBoundary; // there will never be a save block to stand on for Y values > highestBlockBoundary
-            }
-        }
-        if (Y < limBot){
-            Y = limBot;
-        }
-
-        // for non-Nether worlds we don't need to check upwards to the world-limit, it is enough to check up to the highestBlockBoundary, unless player is flying
-        if (!isNether && !flying)
-            limTop = highestBlockBoundary;
-        // Expanding Y search method adapted from Acru's code in the Nether plugin
 
         for(int y1 = Y, y2 = Y; (y1 > limBot) || (y2 < limTop); y1--, y2++){
             // Look above.
             if(y2 < limTop){
                 if (isSafeSpot(world, X, y2, Z, flying))
-                    return (double)y2;
+                    return y2;
             }
-
             // Look below.
             if(y1 > limBot && y2 != y1){
                 if (isSafeSpot(world, X, y1, Z, flying))
-                    return (double)y1;
+                    return y1;
             }
 
         }
 
-        return -1.0;	// no safe Y location?!?!? Must be a rare spot in a Nether world or something
+        return -100;
     }
 
     public static void safeTeleport(Player p, Location loc){
         assert loc.getWorld() != null;
         double desY = getSafeY(loc.getWorld(), (int)loc.getX(), (int)loc.getY(), (int)loc.getZ(), p.isFlying());
 
-        //if(desY == -1){
-        //    desY = loc.getWorld().getHighestBlockYAt((int)loc.getX(), (int)loc.getZ());
-        //}
+        if(desY == -100){
+            desY = loc.getWorld().getHighestBlockYAt((int)loc.getX(), (int)loc.getZ());
+        }
+
         Location desLoc = new Location(loc.getWorld(), loc.getX(), desY, loc.getZ(), loc.getYaw(), loc.getPitch());
         p.teleport(desLoc);
     }
