@@ -1,7 +1,7 @@
 # 玩家在被边界击退时的提示语
-knock-back-msg: "§6[交大助手] 你已到达区域边界"
+knock-back-msg: §6[交大助手] 你已到达区域边界
 # 玩家在尝试传送到边界外时的提示语
-tp-out-msg: "§6[交大助手] 你不可传送到区域边界外"
+tp-out-msg: §6[交大助手] 你不可传送到区域边界外
 # 将玩家击退的距离
 knock-back-distance: 5
 
@@ -12,31 +12,31 @@ areas:
     # 区域名称
     old:
       # 区域x上限
-      x-max: 40
+      x-max: 7000
       # 区域x下限
-      x-min: -40
+      x-min: -8000
       # 区域z上限
-      z-max: 40
+      z-max: 8000
       # 区域z下限
-      z-min: -40
+      z-min: -8000
       # 出生点x坐标
       spawn-x: 0
       # 出生点z坐标
       spawn-z: 0
     new:
-      x-max: 140
-      x-min: 60
-      z-max: 140
-      z-min: 60
-      spawn-x: 100
-      spawn-z: 100
+      x-max: -9000
+      x-min: -20000
+      z-max: 5000
+      z-min: -5000
+      spawn-x: -15000
+      spawn-z: 0
   world_nether:
     old:
-      x-max: 40
-      x-min: -40
-      z-max: 40
-      z-min: -40
-      spawn-x: 0
+      x-max: -1125
+      x-min: -2500
+      z-max: 625
+      z-min: -625
+      spawn-x: 1875
       spawn-z: 0
     new:
       x-max: 140
@@ -48,17 +48,17 @@ areas:
   # 因为两个区域的玩家是在两个末地世界，所以这里有两个末地世界，每个世界只有一个border
   world_the_end:
     old:
-      x-max: 40
-      x-min: -40
-      z-max: 40
-      z-min: -40
+      x-max: 3000
+      x-min: -3000
+      z-max: 3000
+      z-min: -3000
       spawn-x: 0
       spawn-z: 0
   world_the_end_new:
     new:
-      x-max: 40
-      x-min: -40
-      z-max: 40
-      z-min: -40
+      x-max: 3000
+      x-min: -3000
+      z-max: 3000
+      z-min: -3000
       spawn-x: 0
       spawn-z: 0
